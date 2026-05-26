@@ -4,7 +4,7 @@ class home{
         require_once '../app/views/home/index.php';
     }
     
-    public function home() {
+    public function login() {
         require_once '../app/views/home/login.php';
     }
 }
