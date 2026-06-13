@@ -1,41 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách sinh viên</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Danh sách sinh viên</h1>
-    <table>
+<?php
+$sinhviens = $sinhviens ?? [];
+$totalpage = $totalpage ?? 1;
+$limit = $limit ?? 5;
+$offset = $offset ?? 0;
+
+$currentPage = floor($offset / $limit) + 1;
+?>
+
+<h1><?php echo $title ?? 'Danh sách sinh viên'; ?></h1>
+
+<div style="margin-bottom: 15px;">
+    <a href="<?php echo BASE_URL; ?>/home/index">Trở về Home</a>
+    |
+    <a href="<?php echo BASE_URL; ?>/sinhvien/create">Thêm sinh viên</a>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Tên</th>
+        <th>MSSV</th>
+        <th>Giới tính</th>
+        <th>Thao tác</th>
+    </tr>
+
+    <?php foreach ($sinhviens as $index => $sinhvien): ?>
         <tr>
-            <th>STT</th>
-            <th>Họ và tên</th>
-            <th>Giới tính</th>
-            <th>MSSV</th>
+            <td><?php echo $offset + $index + 1; ?></td>
+            <td><?php echo $sinhvien['hoten']; ?></td>
+            <td><?php echo $sinhvien['mssv']; ?></td>
+            <td><?php echo $sinhvien['gioitinh']; ?></td>
+            <td>
+                <a href="<?php echo BASE_URL; ?>/sinhvien/edit/<?php echo $sinhvien['id']; ?>">Sửa</a>
+                |
+                <a href="<?php echo BASE_URL; ?>/sinhvien/delete/<?php echo $sinhvien['id']; ?>">Xóa</a>
+            </td>
         </tr>
-        <?php foreach ($sinhviens as $index => $sinhvien) : ?>
-            <tr>
-                <td><?php echo $index + 1; ?></td>
-                <td><?php echo $sinhvien['hoten']; ?></td>
-                <td><?php echo $sinhvien['gioitinh']; ?></td>
-                <td><?php echo $sinhvien['mssv']; ?></td>
-            </tr>
-        <?php endforeach; ?>
-    </table>
-</body>
-</html>
+    <?php endforeach; ?>
+</table>
+
+<div style="margin-top: 20px;">
+    <?php for ($i = 1; $i <= $totalpage; $i++): ?>
+        <?php
+            $newOffset = ($i - 1) * $limit;
+        ?>
+
+        <?php if ($i == $currentPage): ?>
+            <strong style="margin-right: 8px;">
+                <?php echo $i; ?>
+            </strong>
+        <?php else: ?>
+            <a style="margin-right: 8px;" href="<?php echo BASE_URL; ?>/sinhvien/index/<?php echo $limit; ?>/<?php echo $newOffset; ?>">
+                <?php echo $i; ?>
+            </a>
+        <?php endif; ?>
+    <?php endfor; ?>
+</div>

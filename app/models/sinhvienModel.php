@@ -1,26 +1,64 @@
 <?php
-    require_once '../app/core/DB.php';
-    class sinhvienModel {
-        private $conn;
-        public function __construct() {
-            $this->conn = ConnectDB::Connect();
-        }
-        public function getAllSinhVien() {
-            $query = "SELECT * FROM tbl_sinhviens";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        public function create($hoten, $gioitinh, $mssv) {
-            $query = "INSERT INTO tbl_sinhviens (hoten, gioitinh, mssv) VALUES (:hoten, :gioitinh, :mssv)";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':hoten', $hoten);
-            $stmt->bindParam(':gioitinh', $gioitinh);
-            $stmt->bindParam(':mssv', $mssv);
-            if ($stmt->execute()) {
-                return true;
-            } else {
-                return false;
-            }
+
+require_once '../app/core/DB.php';
+
+class sinhvienModel
+{
+    private $conn;
+
+    public function __construct()
+    {
+        $this->conn = ConnectDB::Connect();
+    }
+
+    public function getAllSinhvien()
+    {
+        $query = "SELECT * FROM tbl_sinhviens";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function create($hoten, $gioitinh, $mssv)
+    {
+        $query = "INSERT INTO tbl_sinhviens (hoten, gioitinh, mssv) 
+                  VALUES (:hoten, :gioitinh, :mssv)";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':hoten', $hoten);
+        $stmt->bindParam(':gioitinh', $gioitinh);
+        $stmt->bindParam(':mssv', $mssv);
+
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
         }
     }
+
+    public function paging($limit = 5, $offset = 0)
+    {
+        $query = "SELECT * FROM tbl_sinhviens LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $stmt->execute();
+        $sinhviens = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $selectAllQuery = $this->conn->query("SELECT COUNT(*) FROM tbl_sinhviens");
+        $totalRecord = $selectAllQuery->fetchColumn();
+
+        $totalpage = ceil($totalRecord / $limit);
+
+        return [
+            'sinhviens' => $sinhviens,
+            'totalpage' => $totalpage
+        ];
+    }
+}
+
+?>
