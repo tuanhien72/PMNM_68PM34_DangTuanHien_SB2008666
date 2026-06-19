@@ -9,13 +9,26 @@
                 $username = $_POST['username'] ?? '';
                 $password = $_POST['password'] ?? '';
                 if (isset($this->user[$username]) && $this->user[$username] === $password) {
-                    header('Location:/home/index');
+                    $_SESSION['username'] = $username;
+                    header('Location: ' . BASE_URL . '/home/index');
                     exit();
                 } else {
-                    header('Location:/home/login');
+                    header('Location: ' . BASE_URL . '/home/login?error=1');
                     exit();
                 }
             }
+
+            header('Location: ' . BASE_URL . '/home/login');
+            exit();
         }
-    }
+
+        public function logout()
+        {
+        session_destroy();
+
+        header('Location: ' . BASE_URL . '/home/login');
+        exit();
+        }
+}
+
 ?>
