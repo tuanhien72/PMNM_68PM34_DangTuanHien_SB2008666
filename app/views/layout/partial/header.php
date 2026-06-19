@@ -1,13 +1,35 @@
-<header class="bg-indigo-700 text-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <div>
-            <h1 class="text-lg font-bold tracking-tight">Hệ Thống Quản Lý Học Vụ</h1>
-            <p class="text-xs text-indigo-200">Xin chào, <?php echo $_SESSION['username'] ?? 'Guest'; ?></p>
+<?php if (isset($_SESSION['username'])): ?>
+<nav class="navbar navbar-expand-lg navbar-dark app-navbar shadow-sm py-3">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="<?php echo BASE_URL; ?>/home/index">
+            <span class="app-brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+            <span>QLSV</span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <div class="navbar-nav me-auto ms-lg-3 gap-lg-1">
+                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>/sinhvien/index">
+                    <i class="bi bi-people me-1"></i> Quản lý sinh viên
+                </a>
+                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>/lophoc/index">
+                    <i class="bi bi-journal-bookmark me-1"></i> Quản lý lớp học
+                </a>
+            </div>
+
+            <div class="navbar-nav align-items-lg-center gap-lg-2">
+                <span class="navbar-text text-white-50">
+                    <i class="bi bi-person-circle me-1"></i>
+                    <?php echo htmlspecialchars($_SESSION['username']); ?>
+                </span>
+                <a class="btn btn-sm btn-outline-light mt-2 mt-lg-0" href="<?php echo BASE_URL; ?>/auth/logout">
+                    <i class="bi bi-box-arrow-right me-1"></i> Đăng xuất
+                </a>
+            </div>
         </div>
-        <nav class="flex space-x-2 bg-indigo-800 p-1 rounded-lg text-sm font-semibold">
-            <a href="/sinhvien/index" class="px-4 py-2 rounded-md hover:bg-indigo-600 transition">Quản lý Sinh Viên</a>
-            <a href="/lophoc/index" class="px-4 py-2 rounded-md hover:bg-indigo-600 transition">Quản lý Lớp Học</a>
-            <a href="/auth/logout" class="px-4 py-2 bg-rose-600 text-white rounded-md hover:bg-rose-700 transition">Đăng xuất</a>
-        </nav>
     </div>
-</header>
+</nav>
+<?php endif; ?>

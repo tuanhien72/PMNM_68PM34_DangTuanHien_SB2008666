@@ -1,3 +1,6 @@
-<footer class="bg-slate-900 text-slate-400 py-4 text-center text-xs border-t border-slate-800 mt-auto">
-    <p>&copy; 2026 - Dự Án Quản Lý Học Vụ PHP MVC OOP.</p>
+<footer class="app-footer py-3 mt-auto">
+    <div class="container d-flex flex-wrap justify-content-between gap-2 small">
+        <span><i class="bi bi-mortarboard me-1"></i> Hệ thống quản lý sinh viên</span>
+        <span>PHP MVC & Bootstrap 5</span>
+    </div>
 </footer>

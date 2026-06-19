@@ -1,38 +1,49 @@
 <?php
+
 class App
 {
     protected $controller = 'home';
-    protected $action = 'index';
+    protected $action = 'login';
     protected $params = [];
 
     public function __construct()
     {
-        // if (isset($_GET['url'])) {
-        //     echo($_GET['url']);
-        // }
-        $urlProcessed = $this->UrlProcess();  //mảng url đã được xử lý
-        //var_dump($urlProcessed);
-        if (isset($urlProcessed[0])) {
-            if (file_exists('../app/controllers/' . $urlProcessed[0] . '.php')) {
-                $this->controller = $urlProcessed[0];
+        $urlProcessed = $this->UrlProcess();
+
+        if (isset($urlProcessed[0]) && $urlProcessed[0] != '') {
+            $controllerName = strtolower($urlProcessed[0]);
+
+            if (file_exists('../app/controllers/' . $controllerName . '.php')) {
+                $this->controller = $controllerName;
                 unset($urlProcessed[0]);
             }
         }
+
         require_once '../app/controllers/' . $this->controller . '.php';
-        $this->controller = new $this->controller; //tạo đối tượng controller
+
+        $this->controller = new $this->controller;
+
         if (isset($urlProcessed[1])) {
-            if (method_exists($this->controller, $urlProcessed[1])) {
-                $this->action = $urlProcessed[1];
+            $actionName = $urlProcessed[1];
+
+            if (method_exists($this->controller, $actionName)) {
+                $this->action = $actionName;
                 unset($urlProcessed[1]);
             }
         }
+
         $this->params = $urlProcessed ? array_values($urlProcessed) : [];
+
         call_user_func_array([$this->controller, $this->action], $this->params);
     }
-    public function UrlProcess(){
+
+    public function UrlProcess()
+    {
         if (isset($_GET['url'])) {
-            return explode('/', filter_var(trim($_GET['url'], '/')));
+            return explode('/', filter_var(trim($_GET['url'], '/'), FILTER_SANITIZE_URL));
         }
+
+        return [];
     }
 }
 
